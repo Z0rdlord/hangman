@@ -1,7 +1,7 @@
 require 'json'
 
 wordlist = File.open("hang_man_words.txt")
-randomword = "poop"
+randomword = "foo"
 
 until randomword.length > 4 and randomword.length <13
     randomword = File.readlines(wordlist).sample
@@ -21,6 +21,7 @@ class Game
     @guess_remain = 8
     @board =[]
     @picked =[]
+    @game_status = "In Progress"
 
    end 
 
@@ -50,32 +51,36 @@ class Game
         @picked << @guess
     end
     puts "Letters chosen so far are #{@picked}."
+    print_board
   end
 
-   
-   
-   
-   
-   #def play
-  
-=begin
-   ```displays  _ _ _ _ for each letter in the word "Pick a letter!"
-   
-   
-   
-   loops until guess = 0 or word is fully guessed
-    gets a letter or save game 
+  def check_status
+    if @board.include?(" _")
+        if @guess_remain < 1
+            puts "Game over, you ran out of guesses"
+            @game_status = 'lose'
+        end
+    else
+        if @board == @word
+            puts "You win!"
+            @game_status = 'win'
+        else
+            puts 'Error'
+        end
+    end
+end
 
         
-    compares that letter to selected word, 
-        if not in word guess -1
-        if in word replace ALL blanks with applicable letter
-    prints out _ _ _ _ and guesses remaining
+def play_game
+    create_board
+    print_board
+    until @game_status != "In Progress" do
+        take_turn
+        check_status
+    end
     
-    
-```
- 
-=end        
+end
+
 
 #serialize game class and export to file - wrote for JSON but the yaml dump method will probably be better
 
@@ -96,9 +101,11 @@ class Game
 end 
 
 gameTest = Game.new(randomword)
-p gameTest
-p gameTest.word
-gameTest.create_board
-gameTest.print_board
-gameTest.take_turn
-gameTest.print_board
+gameTest.play_game
+
+#p gameTest
+#p gameTest.word
+#gameTest.create_board
+#gameTest.print_board
+#gameTest.take_turn
+#gameTest.print_board
