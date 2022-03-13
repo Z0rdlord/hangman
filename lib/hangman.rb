@@ -24,14 +24,34 @@ class Game
 
    end 
 
-   def print_board
+   def create_board
     num_of_blanks = word.length
 
     num_of_blanks.times {
         @board << " _"
     }
-    puts @board
-end 
+    
+  end 
+
+  def print_board
+    puts " #{@board.join}"
+  end
+
+  def take_turn
+    puts 'Pick a letter'
+    @guess = gets.chomp
+
+    if @word.include?(@guess)    
+        @word.each_with_index {|letter,index| (letter == @guess) ? @board[index] = @guess : " _" }
+        @picked << @guess
+    else 
+        @guess_remain -= 1
+        puts "That letter is not in the word. You have #{@guess_remain} guesses left"
+        @picked << @guess
+    end
+    puts "Letters chosen so far are #{@picked}."
+  end
+
    
    
    
@@ -77,5 +97,8 @@ end
 
 gameTest = Game.new(randomword)
 p gameTest
-puts gameTest.word
+p gameTest.word
+gameTest.create_board
+gameTest.print_board
+gameTest.take_turn
 gameTest.print_board
