@@ -1,0 +1,21 @@
+---
+word:
+- f
+- i
+- n
+- d
+- i
+- n
+- g
+guess_remain: 8
+board:
+- f
+- i
+- " _"
+- " _"
+- i
+- " _"
+- " _"
+picked:
+- f
+- i
