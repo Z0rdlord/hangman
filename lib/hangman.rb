@@ -1,4 +1,4 @@
-require 'json'
+require 'yaml'
 
 wordlist = File.open("hang_man_words.txt")
 randomword = "foo"
@@ -77,24 +77,51 @@ def play_game
     until @game_status != "In Progress" do
         take_turn
         check_status
+        save_game
     end
     
 end
 
 
-#serialize game class and export to file - wrote for JSON but the yaml dump method will probably be better
+#serialize game class and export to file
 
-    def to_json
-        JSON.dump({
+    def to_yaml
+        YAML.dump({
             :word =>@word,
             :guess_remain =>@guess_remain,
-            :board => @board
+            :board => @board,
+            :picked => @picked
         })
     end 
 
-    def self.from_json(string)
-        data= JSON.load string
-        self.new(data['word'],data['guess_remain'],data['board'])
+    def self.from_yaml(string)
+        data= YAML.load string
+        self.new(data[:word],data[:guess_remain],data[:board],data[:picked])
+    end
+
+
+    def save_game
+       puts "Would you like to save your game? Y/N"
+       saveGame = gets.chomp
+
+       if saveGame == 'Y'
+                    
+            Dir.mkdir('saved_games') unless Dir.exist?('saved_games')
+
+            puts 'Enter filename'
+            filename = gets.chomp
+            filename = "saved_games/#{filename}"
+
+            File.open(filename,'w') do |file|
+                file.puts to_yaml
+            end
+            @game_status = "Saved"
+        else
+            @game_status
+        end
+
+
+
     end
 
 
@@ -102,7 +129,7 @@ end
 
 gameTest = Game.new(randomword)
 gameTest.play_game
-
+#gameTest.save_game
 #p gameTest
 #p gameTest.word
 #gameTest.create_board

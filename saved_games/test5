@@ -1,0 +1,21 @@
+---
+:word:
+- h
+- o
+- t
+- m
+- a
+- i
+- l
+:guess_remain: 8
+:board:
+- " _"
+- " _"
+- t
+- " _"
+- " _"
+- " _"
+- l
+:picked:
+- t
+- l
