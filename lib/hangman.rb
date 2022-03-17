@@ -116,6 +116,9 @@ end
 
     
     def load_saved_game
+        puts "Here are the files to choose from\n"
+        puts Dir.children('saved_games')
+                
         puts "Enter a file name"
         savedgame = gets.chomp
         savedgame = "#{savedgame}.yaml"
@@ -125,6 +128,7 @@ end
         @guess_remain =file['guess_remain']
         @board = file['board']
         @picked =file['picked']
+        File.delete("saved_games/#{savedgame}")
     end
 
 
@@ -132,7 +136,7 @@ end
        saveGame = 'bar'
         
        until saveGame == 'y' or saveGame =='n' do
-        puts "\nWould you like to save your game? Y/N"
+        puts "Would you like to save your game? Y/N"
        saveGame = gets.chomp.downcase    
        end
 
