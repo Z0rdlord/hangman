@@ -7,8 +7,9 @@ until randomword.length > 4 and randomword.length <13
     randomword = File.readlines(wordlist).sample
 end 
 
+#This is for troubleshooting purposes to verify guesses working correctly
 puts randomword 
-puts randomword.length
+
 
 
 class Game
@@ -26,7 +27,7 @@ class Game
     newOrSaved = 3
     
     until newOrSaved == "1" or newOrSaved == "2"
-        puts "Press 1 for New game. Press 2 to load saved game"
+        puts "Press 1 for New game. \nPress 2 to load saved game"
         newOrSaved = gets.chomp
     end
 
@@ -56,7 +57,7 @@ class Game
   end
 
   def take_turn
-    puts 'Pick a letter'
+    puts "Pick a letter\n"
     @guess = gets.chomp
 
     if @word.include?(@guess)    
@@ -64,10 +65,10 @@ class Game
         @picked << @guess
     else 
         @guess_remain -= 1
-        puts "That letter is not in the word. You have #{@guess_remain} guesses left"
+        puts "That letter is not in the word.\n"
         @picked << @guess
     end
-    puts "Letters chosen so far are #{@picked}. You still have #{@guess_remain} guesses left."
+    puts "Letters chosen so far are #{@picked}. You still have #{@guess_remain} guesses left.\n"
     
   end
 
@@ -92,16 +93,17 @@ def play_game
     
     
     until @game_status != "In Progress" do
-        print_board
+        
         take_turn
         check_status
+        print_board
         save_game
     end
     
 end
 
 
-#serialize game class and export to file
+#serialize game class and export to yaml file
 
     def to_yaml
         YAML.dump(
@@ -112,6 +114,7 @@ end
         )
     end 
 
+    
     def load_saved_game
         puts "Enter a file name"
         savedgame = gets.chomp
@@ -126,10 +129,14 @@ end
 
 
     def save_game
-       puts "Would you like to save your game? Y/N"
-       saveGame = gets.chomp 
+       saveGame = 'bar'
+        
+       until saveGame == 'y' or saveGame =='n' do
+        puts "\nWould you like to save your game? Y/N"
+       saveGame = gets.chomp.downcase    
+       end
 
-       if saveGame == 'Y'
+       if saveGame == 'y'
                     
             Dir.mkdir('saved_games') unless Dir.exist?('saved_games')
 
@@ -141,6 +148,8 @@ end
                 file.puts to_yaml
             end
             @game_status = "Saved"
+            puts
+            puts "Goodbye"
         else
             @game_status
         end
@@ -153,15 +162,3 @@ end
 end 
 
 Game.new(randomword)
-#gameTest.play_game
-#gameTest.load_saved_game
-
-
-
-#gameTest.save_game
-#p gameTest
-#p gameTest.word
-#gameTest.create_board
-#gameTest.print_board
-#gameTest.take_turn
-#gameTest.print_board
